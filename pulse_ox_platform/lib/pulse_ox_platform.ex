@@ -5,7 +5,8 @@ defmodule PulseOxPlatform do
 
   import Ecto.Query
 
-  alias PulseOx.{Repo, Schema.Event}
+  alias PulseOxPlatform.Repo
+  alias PulseOx.Schema.Event
 
   @spec insert(%PulseOxReader{}) :: term()
   def insert(event) do

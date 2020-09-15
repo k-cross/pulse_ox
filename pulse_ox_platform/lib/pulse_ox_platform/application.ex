@@ -7,6 +7,7 @@ defmodule PulseOxPlatform.Application do
 
   def start(_type, _args) do
     children = [
+      PulseOxPlatform.Repo,
       # Start the Telemetry supervisor
       PulseOxPlatformWeb.Telemetry,
       # Start the PubSub system

@@ -7,6 +7,14 @@
 # General application configuration
 import Config
 
+config :pulse_ox_platform, ecto_repos: [PulseOxPlatform.Repo]
+
+config :pulse_ox_platform, PulseOxPlatform.Repo,
+  database: "pulse_ox_dev",
+  username: "pulseox",
+  password: "pulseoximeter",
+  hostname: "localhost"
+
 # Configures the endpoint
 config :pulse_ox_platform, PulseOxPlatformWeb.Endpoint,
   url: [host: "localhost"],

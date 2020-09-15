@@ -19,7 +19,7 @@ defmodule PulseOxReader do
   # TODO: make this configurable
   @reader Device.Masimo.RAD8
 
-  defstruct [:datetime, :serial, :spo2, :bpm, :desaturation, :perfusion_index, :alert, :info]
+  defstruct [:datetime, :serial, :spo2, :bpm, :perfusion_index, :alert, :info]
 
   def init do
     serial_device = find_device()
@@ -45,7 +45,6 @@ defmodule PulseOxReader do
             datetime: dt,
             serial: sn,
             spo2: spo2,
-            desaturation: desat,
             bpm: bpm,
             perfusion_index: pi,
             info: info,
@@ -56,7 +55,6 @@ defmodule PulseOxReader do
               serial_number: sn,
               spo2: spo2,
               bpm: bpm,
-              desaturation: desat,
               perfusion_index: pi,
               reliable?: :maybe
             ]

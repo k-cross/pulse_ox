@@ -13,6 +13,12 @@ config :pulse_ox_platform, PulseOxPlatformWeb.Endpoint,
   url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :pulse_ox_platform, PulseOxPlatform.Repo,
+  database: "pulse_ox",
+  username: "pulseox",
+  password: "pulseoximeter",
+  hostname: "localhost"
+
 # Do not print debug messages in production
 config :logger, level: :info
 

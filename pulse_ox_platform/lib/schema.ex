@@ -13,7 +13,7 @@ defmodule PulseOx.Schema.Event do
     field(:perfusion_index, :float, null: false)
   end
 
-  @required [:spo2, :bpm, :pi]
+  @required [:spo2, :bpm, :perfusion_index]
 
   def changeset(data) do
     %__MODULE__{}

@@ -50,16 +50,7 @@ defmodule PulseOxReader do
             info: info,
             alert: alert
           } = por ->
-            evt = [
-              datetime: dt,
-              serial_number: sn,
-              spo2: spo2,
-              bpm: bpm,
-              perfusion_index: pi,
-              reliable?: :maybe
-            ]
-
-            PulseOxPlatform.insert(evt)
+            PulseOxPlatform.insert(por)
             por
 
           _ ->

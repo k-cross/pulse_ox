@@ -54,6 +54,7 @@ defmodule Device.Masimo do
 
     # Exceptions are displayed as 3 digit ASCII encoded hexadecimal values
     @known_exceptions %{
+      "000000" => :normal,
       "000001" => :no_sensor,
       "000002" => :sensor_defective,
       "000004" => :low_perfusion,
@@ -68,6 +69,7 @@ defmodule Device.Masimo do
 
     # Corresponds to specific bits that are set
     @alarm %{
+      "0000" => :normal,
       "0001" => :spo2_high,
       "0002" => :spo2_low,
       "0004" => :bpm_high,

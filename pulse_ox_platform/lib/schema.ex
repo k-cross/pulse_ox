@@ -15,7 +15,14 @@ defmodule PulseOx.Schema.Event do
 
   @required [:spo2, :bpm, :perfusion_index]
 
-  def changeset(%PulseOxReader{} = por), do: Map.from_struct(por) |> changeset()
+  def changeset(%PulseOxReader{} = por) do
+    por
+    |> Map.from_struct()
+    |> Map.update(:spo2, por.spo2, fn x -> round(x) end)
+    |> Map.update(:bpm, por.bpm, fn x -> round(x) end)
+    |> changeset()
+  end
+
   def changeset(data) do
     %__MODULE__{}
     |> cast(data, @required)

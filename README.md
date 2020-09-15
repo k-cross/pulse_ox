@@ -33,6 +33,9 @@ Note: unfortunately the db setup scripts are broken but they contain the steps t
 
 ### Hardware
 
+1. make sure RAD8 is unlocked
+1. set the device's serial output to ASCII 1
+
 ### Software
 
 To start your Phoenix server:

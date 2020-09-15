@@ -18,7 +18,6 @@ defmodule PulseOxPlatform.Application do
       # {PulseOxPlatform.Worker, arg}
     ]
 
-    PulseOxPlatform.init_db()
     PulseOxReader.init()
 
     # See https://hexdocs.pm/elixir/Supervisor.html

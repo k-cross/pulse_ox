@@ -3,6 +3,8 @@ defmodule PulseOxPlatform do
   Responsible for coordinating the pub/sub mechanisms.
   """
 
+  import Ecto.Query
+
   alias PulseOx.{Repo, Schema.Event}
 
   @spec insert(%PulseOxReader{}) :: term()
@@ -14,10 +16,23 @@ defmodule PulseOxPlatform do
 
   @spec get_today() :: %PulseOxReader{}
   def get_today() do
-    # Date.today()
+    Date.utc_today()
+    |> Timex.to_datetime()
+    |> start_time_query(Event)
+    |> reliability_query()
+    |> PulseOxPlatform.Repo.all()
   end
 
   @spec get_range(DateTime.t(), DateTime.t()) :: %PulseOxReader{}
   def get_range(start, finish) do
+    start
+    |> start_time_query(Event)
+    |> finish_time_query(finish)
+    |> reliability_query()
+    |> PulseOxPlatform.Repo.all()
   end
+
+  defp start_time_query(t, q), do: from(e in q, where: e.inserted_at > ^t)
+  defp finish_time_query(t, q), do: from(e in q, where: e.inserted_at < ^t)
+  defp reliability_query(q), do: from(e in q, where: e.perfusion_index > 0.1)
 end

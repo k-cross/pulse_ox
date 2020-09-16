@@ -3,10 +3,10 @@ defmodule PulseOxPlatformWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    Process.send_after(self(), :update, 50)
+    Process.send_after(self(), :update, 250)
 
-    case PulseOxReader.next(:reader) do
-      %PulseOxReader{} = por ->
+    case :ets.lookup(:po_data, :event) do
+      [{:event, %PulseOxReader{} = por}] ->
         {:ok,
          assign(socket,
            bpm: por.bpm,

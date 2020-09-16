@@ -13,12 +13,14 @@ defmodule PulseOxPlatform.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: PulseOxPlatform.PubSub},
       # Start the Endpoint (http/https)
-      PulseOxPlatformWeb.Endpoint
+      PulseOxPlatformWeb.Endpoint,
       # Start a worker by calling: PulseOxPlatform.Worker.start_link(arg)
       # {PulseOxPlatform.Worker, arg}
+      {Task, fn -> PulseOxPlatform.Data.data_gather_loop() end}
     ]
 
     PulseOxReader.init()
+    PulseOxPlatform.Data.setup_ets()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options

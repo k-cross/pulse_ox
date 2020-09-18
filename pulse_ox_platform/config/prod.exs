@@ -10,7 +10,7 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :pulse_ox_platform, PulseOxPlatformWeb.Endpoint,
-  url: [host: "192.168.50.65", port: 80],
+  url: [host: "localhost", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :pulse_ox_platform, PulseOxPlatform.Repo,

@@ -7,7 +7,7 @@ defmodule Device.Random do
     :ok
   end
 
-  def parse_string(str) do
+  def parse_string(_str) do
     %PulseOxReader{
       datetime: DateTime.utc_now(),
       serial: "random",

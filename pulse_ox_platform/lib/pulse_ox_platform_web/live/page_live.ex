@@ -52,6 +52,7 @@ defmodule PulseOxPlatformWeb.PageLive do
     """
   end
 
+  @impl true
   def handle_info(:update, socket) do
     {:no_reply, socket}
   end

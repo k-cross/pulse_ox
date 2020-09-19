@@ -3,33 +3,17 @@ defmodule PulseOxPlatformWeb.PageLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    Process.send_after(self(), :update, 250)
+    if connected?(socket), do: Process.send_after(self(), :update, 250)
 
-    case :ets.lookup(:po_data, :event) do
-      [{:event, %PulseOxReader{} = por}] ->
-        {:ok,
-         assign(socket,
-           bpm: por.bpm,
-           spo2: por.spo2,
-           pi: por.perfusion_index,
-           alert: por.alert,
-           info: por.info,
-           datetime: por.datetime
-         )}
-
-      _ ->
-        PulseOxReader.reconnect(:reader)
-
-        {:ok,
-         assign(socket,
-           bpm: "disconnected",
-           spo2: "disconnected",
-           pi: "disconnected",
-           alert: "disconnected",
-           info: "disconnected",
-           datetime: "disconnected"
-         )}
-    end
+    {:ok,
+     assign(socket,
+       bpm: "initializing",
+       spo2: "initializing",
+       pi: "initializing",
+       alert: "initializing",
+       info: "initializing",
+       datetime: "initializing"
+     )}
   end
 
   @impl true
@@ -54,6 +38,32 @@ defmodule PulseOxPlatformWeb.PageLive do
 
   @impl true
   def handle_info(:update, socket) do
-    {:no_reply, socket}
+    Process.send_after(self(), :update, 250)
+
+    case :ets.lookup(:po_data, :event) do
+      [{:event, %PulseOxReader{} = por}] ->
+        {:noreply,
+         assign(socket,
+           bpm: por.bpm,
+           spo2: por.spo2,
+           pi: por.perfusion_index,
+           alert: por.alert,
+           info: por.info,
+           datetime: por.datetime
+         )}
+
+      _ ->
+        PulseOxReader.reconnect(:reader)
+
+        {:noreply,
+         assign(socket,
+           bpm: "disconnected",
+           spo2: "disconnected",
+           pi: "disconnected",
+           alert: "disconnected",
+           info: "disconnected",
+           datetime: "disconnected"
+         )}
+    end
   end
 end

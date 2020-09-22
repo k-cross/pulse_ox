@@ -41,15 +41,7 @@ defmodule PulseOxReader do
           %PulseOxReader{spo2: :no_reading} = por ->
             por
 
-          %PulseOxReader{
-            datetime: dt,
-            serial: sn,
-            spo2: spo2,
-            bpm: bpm,
-            perfusion_index: pi,
-            info: info,
-            alert: alert
-          } = por ->
+          por = %PulseOxReader{spo2: num} when is_number(num) ->
             PulseOxPlatform.insert(por)
             por
 

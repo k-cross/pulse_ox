@@ -1,3 +1,49 @@
 <section class="phx-hero">
-  <h1>Pulse Oximeter</h1>
+  <h1>Pulse Oximeter Readings</h1>
+</section>
+<section class="container">
+    <div>
+      <b>BPM:</b> <%= @bpm %>
+    </div>
+    <div>
+      <b>SPO2:</b> <%= @spo2 %>
+    </div>
+    <div>
+      <b>Perfusion Index:</b> <%= @pi %>
+    </div>
+    <div>
+      <div><b>Timestamp:</b> <%= @datetime %> </div>
+      <div><b>Alert:</b> <%= @alert %> </div>
+      <div><b>Information:</b> <%= @info %> </div>
+    </div>
+    <br/>
+    <div>
+      <div><b>Average SPO2:</b> <%= @avg_spo2 %></div>
+      <div><b>Durration:</b> <%= @durration %></div>
+    </div>
+    <div>
+      <b>Min SPO2:</b> <%= @min_spo2 %>
+    </div>
+    <div>
+      <b>Max SPO2:</b> <%= @max_spo2 %>
+    </div>
+</section>
+<section class="container">
+  <div>
+    <div>
+      <form>
+        <div>
+          <label for="spo2_level">SPO2 Cutoff:</label>
+          <input type="number" id="spo2_level" name="spo2_cutoff">
+        </div>
+        <div>
+          <label for="time_cutoff">Lower Limit Date:</label>
+          <input type="date" id="time_cutoff" name="time_barrier">
+        </div>
+        <div>
+          <button phx-click="analyze">Analyze</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </section>

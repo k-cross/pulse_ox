@@ -40,16 +40,10 @@ defmodule Device.Masimo do
     alias Nerves.UART
 
     @pulse_ox_type :rad8s1
-    @port :none
     @baud_rate 9600
     @data_bits 8
     @parity :none
     @stop_bits 1
-    @timeout :none
-    @xonoff false
-    @rtscts false
-    @dsrdtr false
-    @write_timeout 2
     @separator "\r\n"
 
     # Exceptions are displayed as 3 digit ASCII encoded hexadecimal values
@@ -103,8 +97,8 @@ defmodule Device.Masimo do
         [date_str, time_str | reduced_split] = split_str
         {:ok, dt} = Timex.parse(date_str <> " " <> time_str, "%m/%d/%y %H:%M:%S", :strftime)
 
-        [serial_number, spo2_str, bpm_str, pi_str | rest] = reduced_split
-        [alarm_code, exc_code | _] = reduced_split |> Enum.reverse()
+        [serial_number, spo2_str, bpm_str, pi_str | _rest] = reduced_split
+        [exc_code, alarm_code | _] = reduced_split |> Enum.reverse()
         [_, sn] = String.split(serial_number, "=")
 
         [spo2, bpm, perf_index] =

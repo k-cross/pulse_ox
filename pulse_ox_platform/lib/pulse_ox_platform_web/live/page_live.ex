@@ -30,6 +30,7 @@ defmodule PulseOxPlatformWeb.PageLive do
   points above the given value.
   """
   def handle_event("analyze", args, socket) do
+    IO.inspect(args, label: "args")
     {spo2_level, lower_limit_date} = parse_args(args)
     {avg, {time_unit, amnt}} = Data.analyze_spo2(lower_limit_date, spo2_level)
     durration = to_string(Float.round(amnt, 3)) <> " " <> to_string(time_unit)
@@ -75,9 +76,9 @@ defmodule PulseOxPlatformWeb.PageLive do
   defp parse_args(%{"time_barrier" => date}), do: {nil, date} |> normalize_args()
   defp parse_args(_), do: {nil, nil} |> normalize_args()
 
-  defp normalize_args({nil, a2} = args), do: normalize_args({100, a2})
+  defp normalize_args({nil, a2}), do: normalize_args({100, a2})
 
-  defp normalize_args({a1, nil} = args),
+  defp normalize_args({a1, nil}),
     do: normalize_args({a1, DateTime.utc_now() |> Timex.shift(days: -1)})
 
   defp normalize_args({a1, a2}) when is_binary(a1),

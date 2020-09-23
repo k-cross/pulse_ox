@@ -33,7 +33,7 @@ defmodule PulseOxPlatformWeb.PageLive do
     {spo2_level, lower_limit_date} = parse_args(args)
     {avg, {time_unit, amnt}} = Data.analyze_spo2(lower_limit_date, spo2_level)
     durration = to_string(Float.round(amnt, 3)) <> " " <> to_string(time_unit)
-    {:noreply, assign(socket, avg_spo2: avg, durration: durration)}
+    {:noreply, assign(socket, avg_spo2: to_string(Decimal.round(avg, 3)), durration: durration)}
   end
 
   @impl true

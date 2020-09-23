@@ -30,10 +30,9 @@ defmodule PulseOxPlatformWeb.PageLive do
   points above the given value.
   """
   def handle_event("analyze", args, socket) do
-    IO.inspect(args, label: "args")
     {spo2_level, lower_limit_date} = parse_args(args)
-    {avg, {time_unit, amnt}} = Data.analyze_spo2(DateTime.utc_now() |> Timex.shift(days: -1), 100)
-    durration = to_string(time_unit) <> ": " <> to_string(Float.round(amnt, 3))
+    {avg, {time_unit, amnt}} = Data.analyze_spo2(lower_limit_date, spo2_level)
+    durration = to_string(Float.round(amnt, 3)) <> " " <> to_string(time_unit)
     {:noreply, assign(socket, avg_spo2: avg, durration: durration)}
   end
 
@@ -70,11 +69,22 @@ defmodule PulseOxPlatformWeb.PageLive do
   end
 
   defp parse_args(%{"spo2_cutoff" => spo2_cutoff, "time_barrier" => date}),
-    do: {spo2_cutoff, date} |> IO.inspect(label: "1")
+    do: {spo2_cutoff, date} |> normalize_args()
 
-  defp parse_args(%{"spo2_cutoff" => spo2_cutoff}),
-    do: {spo2_cutoff, nil} |> IO.inspect(label: "2")
+  defp parse_args(%{"spo2_cutoff" => spo2_cutoff}), do: {spo2_cutoff, nil} |> normalize_args()
+  defp parse_args(%{"time_barrier" => date}), do: {nil, date} |> normalize_args()
+  defp parse_args(_), do: {nil, nil} |> normalize_args()
 
-  defp parse_args(%{"time_barrier" => date}), do: {nil, date} |> IO.inspect(label: "3")
-  defp parse_args(_), do: {nil, nil} |> IO.inspect(label: "4")
+  defp normalize_args({nil, a2} = args), do: normalize_args({100, a2})
+
+  defp normalize_args({a1, nil} = args),
+    do: normalize_args({a1, DateTime.utc_now() |> Timex.shift(days: -1)})
+
+  defp normalize_args({a1, a2}) when is_binary(a1),
+    do: normalize_args({Integer.parse(a1) |> elem(0), a2})
+
+  defp normalize_args({a1, a2}) when is_binary(a2),
+    do: {a1, Timex.parse(a2, "{YYYY}-{0M}-{D}") |> elem(1)}
+
+  defp normalize_args(args), do: args
 end

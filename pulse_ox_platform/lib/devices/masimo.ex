@@ -97,16 +97,23 @@ defmodule Device.Masimo do
         [date_str, time_str | reduced_split] = split_str
         {:ok, dt} = Timex.parse(date_str <> " " <> time_str, "%m/%d/%y %H:%M:%S", :strftime)
 
-        [serial_number, spo2_str, bpm_str, pi_str | _rest] = reduced_split
-        [exc_code, alarm_code | _] = reduced_split |> Enum.reverse()
-        [_, sn] = String.split(serial_number, "=")
+        [
+          sn,
+          str_spo2,
+          str_bpm,
+          str_pi,
+          str_spco,
+          str_spmet,
+          str_desat,
+          str_pi_delta,
+          alarm_code,
+          exc_code
+        ] = format_vars(reduced_split)
 
-        [spo2, bpm, perf_index] =
-          [spo2_str, bpm_str, pi_str]
+        [spo2, bpm, perf_index, spco, spmet, desat, pi_delta] =
+          [str_spo2, str_bpm, str_pi, str_spco, str_spmet, str_desat, str_pi_delta]
           |> Enum.map(fn el ->
-            [_, num_string] = String.split(el, "=", parts: 2)
-
-            case Float.parse(num_string) do
+            case Float.parse(el) do
               {num, _} -> num
               _ -> :no_reading
             end
@@ -130,12 +137,24 @@ defmodule Device.Masimo do
           spo2: spo2,
           bpm: bpm,
           perfusion_index: perf_index,
+          spco: spco,
+          spmet: spmet,
+          desat: desat,
+          pi_delta: pi_delta,
           info: info,
           alert: alarm
         }
       else
         nil
       end
+    end
+
+    defp format_vars(var_list) do
+      Enum.map(var_list, fn var ->
+        var
+        |> String.split("=", trim: true, parts: 2)
+        |> List.last()
+      end)
     end
   end
 end

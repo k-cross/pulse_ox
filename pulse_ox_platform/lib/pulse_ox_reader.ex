@@ -20,7 +20,19 @@ defmodule PulseOxReader do
   @reader Device.Masimo.RAD8
   @named_genserver :reader
 
-  defstruct [:datetime, :serial, :spo2, :bpm, :perfusion_index, :alert, :info]
+  defstruct [
+    :datetime,
+    :serial,
+    :spo2,
+    :spco,
+    :spmet,
+    :desat,
+    :pi_delta,
+    :bpm,
+    :perfusion_index,
+    :alert,
+    :info
+  ]
 
   def init do
     serial_device = find_device()

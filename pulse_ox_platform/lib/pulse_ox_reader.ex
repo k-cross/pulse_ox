@@ -18,15 +18,13 @@ defmodule PulseOxReader do
 
   # TODO: make this configurable
   @reader Device.Masimo.RAD8
+  @named_genserver :reader
 
   defstruct [:datetime, :serial, :spo2, :bpm, :perfusion_index, :alert, :info]
 
   def init do
     serial_device = find_device()
-    {:ok, pid} = UART.start_link(name: :reader)
-    @reader.connect(pid, serial_device)
-
-    pid
+    @reader.connect(@named_genserver, serial_device)
   end
 
   def reconnect(pid) do
@@ -37,6 +35,8 @@ defmodule PulseOxReader do
   def next(pid) do
     case UART.read(pid) do
       {:ok, str} ->
+        Logger.info(str)
+
         case @reader.parse_string(str) do
           %PulseOxReader{spo2: :no_reading} = por ->
             por
@@ -50,6 +50,7 @@ defmodule PulseOxReader do
         end
 
       {:error, _} = err ->
+        Logger.error(inspect(err))
         err
     end
   end

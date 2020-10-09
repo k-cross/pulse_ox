@@ -18,8 +18,8 @@ defmodule PulseOx.Schema.Event do
   def changeset(%PulseOxReader{} = por) do
     por
     |> Map.from_struct()
-    |> Map.update(:spo2, por.spo2, fn x -> round(x) end)
-    |> Map.update(:bpm, por.bpm, fn x -> round(x) end)
+    |> nil_or_int_conversion(:spo2)
+    |> nil_or_int_conversion(:bpm)
     |> changeset()
   end
 
@@ -28,5 +28,12 @@ defmodule PulseOx.Schema.Event do
     |> cast(data, @required)
     |> validate_required(@required)
     |> validate_number(:perfusion_index, greater_than: 0.10)
+  end
+
+  defp nil_or_int_conversion(map, key) do
+    Map.update(map, key, nil, fn
+      x when is_number(x) -> round(x)
+      _ -> nil
+    end)
   end
 end

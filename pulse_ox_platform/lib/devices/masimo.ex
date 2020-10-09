@@ -39,7 +39,6 @@ defmodule Device.Masimo do
 
     alias Nerves.UART
 
-    @pulse_ox_type :rad8s1
     @baud_rate 9600
     @data_bits 8
     @parity :none
@@ -94,8 +93,8 @@ defmodule Device.Masimo do
       split_str = String.split(str)
 
       if length(split_str) == 12 do
-        [date_str, time_str | reduced_split] = split_str
-        {:ok, dt} = Timex.parse(date_str <> " " <> time_str, "%m/%d/%y %H:%M:%S", :strftime)
+        [_date_str, _time_str | reduced_split] = split_str
+        dt = DateTime.utc_now()
 
         [
           sn,

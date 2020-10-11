@@ -16,8 +16,7 @@ defmodule PulseOxReader do
 
   alias Nerves.UART
 
-  # TODO: make this configurable
-  @reader Device.Masimo.RAD8
+  @reader Application.get_env(:pulse_ox_platform, :reader)
   @named_genserver :reader
 
   defstruct [
@@ -45,7 +44,7 @@ defmodule PulseOxReader do
   end
 
   def next(pid) do
-    case UART.read(pid) do
+    case @reader.read(pid) do
       {:ok, str} ->
         Logger.info(str)
 

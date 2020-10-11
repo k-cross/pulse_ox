@@ -8,6 +8,7 @@
 import Config
 
 config :pulse_ox_platform, ecto_repos: [PulseOxPlatform.Repo]
+config :pulse_ox_platform, reader: Device.Random
 
 config :pulse_ox_platform, PulseOxPlatform.Repo,
   database: "pulse_ox_dev",

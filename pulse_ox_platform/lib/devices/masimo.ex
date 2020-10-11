@@ -71,6 +71,8 @@ defmodule Device.Masimo do
       "0032" => :mute_pressed
     }
 
+    def read(pid), do: UART.read(pid)
+
     def connect(pid, serial_device) do
       UART.open(
         pid,
@@ -84,10 +86,6 @@ defmodule Device.Masimo do
         framing: {UART.Framing.Line, separator: @separator}
       )
     end
-
-    def flush_data(pid), do: flush_data(pid, UART.read(pid))
-    defp flush_data(_pid, {:ok, ""}), do: :finished
-    defp flush_data(pid, {:ok, _}), do: flush_data(pid, UART.read(pid))
 
     def parse_string(str) do
       split_str = String.split(str)

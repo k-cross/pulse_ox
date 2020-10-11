@@ -1,12 +1,20 @@
 defmodule Device.Random do
   @moduledoc """
-  Builds a randomized data device to start and test for all other parts of the application.
+  Builds a randomized data device to start, demo, and test all other parts of the application.
+  Great as a development tool.
+
+  TODO: turn devices into a behavior so all have a common implementable interface.
   """
 
-  def connect(_pid, _serial_device) do
-    :ok
-  end
+  def connect(_pid, _serial_device), do: :ok
 
+  @doc """
+  Simulate the time it takes to read data from the serial device
+  """
+  @spec read(pid()) :: {:ok, String.t()}
+  def read(_pid), do: {:ok, :timer.sleep(1000) |> to_string()}
+
+  @spec parse_string(String.t()) :: PulseOxReader.t()
   def parse_string(_str) do
     %PulseOxReader{
       datetime: DateTime.utc_now(),

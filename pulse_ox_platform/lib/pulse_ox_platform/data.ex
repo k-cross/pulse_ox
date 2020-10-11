@@ -29,7 +29,7 @@ defmodule PulseOxPlatform.Data do
   end
 
   @doc """
-  Query the pulse oximeter data store in order to get statisticus about blood oxygen levels
+  Query the pulse oximeter data store in order to get statistics about blood oxygen levels
   including the durration of the data and the cutoff values for the minimum datetime and
   perfusion index ranges as well as maximum spo2 range.
 
@@ -38,7 +38,11 @@ defmodule PulseOxPlatform.Data do
   is not readable through the standard serial output. One day, perhaps the Philips IntelliVue
   output will be entirely decoded and open so that we can have nicer graphs and charts.
 
-  Note: Each database entry is calculated based on each datapoint take half a second long.
+  Note: Each database entry is calculated as lasting one second, a better heuristic should
+  be used in order to calculate time or at the very least, calculate percentages from samples
+  and state the sample size instead. This would make the calculation device agnostic. The
+  documentation in the manual for the RAD8 states 0.5 second sample rates but that's a lie, as
+  all the timestamps from the device itself are approximately 1 second apart.
   """
   @spec analyze_spo2(DateTime.t(), number()) :: tuple()
   def analyze_spo2(dt \\ DateTime.utc_now(), spo2_level \\ 100) do
@@ -57,7 +61,7 @@ defmodule PulseOxPlatform.Data do
   end
 
   defp calculate_time(count) do
-    seconds = Enum.reduce(1..count, 0, fn _, acc -> 0.5 + acc end)
+    seconds = Enum.reduce(1..count, 0, fn _, acc -> 1.0 + acc end)
     minutes = seconds / 60.0
 
     if minutes > 60.0 do

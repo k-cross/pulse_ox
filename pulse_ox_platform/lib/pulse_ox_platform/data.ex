@@ -60,6 +60,34 @@ defmodule PulseOxPlatform.Data do
     {average, avg_durration}
   end
 
+  @doc """
+  Grabs data and creates a plot graph with multiple `y` datasets and only datetimes as the `x` dataset.
+  """
+  @spec graph_data(pos_integer() | :infinite) :: svg :: binary()
+  def graph_data(sample_size \\ 3600) do
+    point_plot =
+      from(
+        e in PulseOx.Schema.Event,
+        select: %{
+          inserted_at: e.inserted_at,
+          spo2: e.spo2,
+          bpm: e.bpm,
+          perfusion_index: e.perfusion_index
+        },
+        limit: 3600
+      )
+      |> Repo.all()
+      |> Contex.Dataset.new()
+      |> Contex.PointPlot.new(
+        mapping: %{x_col: :inserted_at, y_cols: [:spo2, :bpm, :perfusion_index]}
+      )
+
+    Contex.Plot.new(600, 400, point_plot)
+    # |> Contex.Plot.plot_options(%{legend_setting: :legend_right})
+    # |> Contex.Plot.titles("Recent Data", "Approximately 1 Hour")
+    |> Contex.Plot.to_svg()
+  end
+
   defp calculate_time(count) do
     seconds = Enum.reduce(1..count, 0, fn _, acc -> 1.0 + acc end)
     minutes = seconds / 60.0

@@ -24,6 +24,8 @@ defmodule PulseOxPlatform.Application do
     PulseOxReader.init()
     PulseOxPlatform.Data.setup_ets()
 
+    :timer.sleep(200)
+
     res
   end
 end

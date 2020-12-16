@@ -24,6 +24,17 @@ I would like for it to:
 
 I am on a clock and can't promise the features will ever be developed on the second list.
 
+## Requirements and Dependencies
+
+Things that are expected to already be setup
+
+* postgresql
+* erlang >= 21.0
+* elixir >= 1.10
+* nodejs >= 10.0
+
+_Note_: Binaries can be built which removes the need for erlang, elixir, and nodejs for a running environment but I don't personally plan on providing this.
+
 ## How to run
 
 The application has been tested on both MacOS and Linux.
@@ -35,16 +46,13 @@ Note: unfortunately the db setup scripts are broken but they contain the steps t
 
 1. make sure RAD8 is unlocked
 1. set the device's serial output to ASCII 1
+1. connect the serial cable to the server and the RAD8
 
 ### Software
 
-To start your Phoenix server:
-
-  * Install dependencies with `mix deps.get`
-  * Install Node.js dependencies with `npm install` inside the `assets` directory
-  * Start Phoenix endpoint with `mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+* build it using `make`
+* run it with `make run`
+* visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 ## Resources
 
@@ -52,3 +60,8 @@ For more information about developing this application further, go to [phoenix](
 
 For more information about setting up the RAD8, refer to its manual.
 I believe page 42 explained how to unlock it and navigate the menu, understanding what all the symbol shorthand represents to properly change settings.
+
+## Development
+
+For development I created a fake pulse oximeter device so that it is much easier to build the web interface and test graphing and other db queries.
+Running the application in `dev` mode automatically configures the fake device so that a real pulse oximeter is not required, it's a PITA to setup a real one over serial all the time!

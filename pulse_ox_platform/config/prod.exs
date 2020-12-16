@@ -21,6 +21,9 @@ config :pulse_ox_platform, PulseOxPlatform.Repo,
   password: "pulseoximeter",
   hostname: "localhost"
 
-config :logger, level: :info
+config :logger,
+  compile_time_purge_matching: [
+    [level_lower_than: :warn]
+  ]
 
 import_config "prod.secret.exs"

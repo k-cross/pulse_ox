@@ -65,6 +65,8 @@ defmodule PulseOxPlatform.Data do
   """
   @spec graph_data(pos_integer() | :infinite) :: svg :: binary()
   def graph_data(sample_size \\ 3600) do
+    y_cols = [:spo2, :bpm, :perfusion_index]
+
     point_plot =
       from(
         e in PulseOx.Schema.Event,
@@ -74,17 +76,18 @@ defmodule PulseOxPlatform.Data do
           bpm: e.bpm,
           perfusion_index: e.perfusion_index
         },
+        order_by: [desc: :inserted_at],
         limit: 3600
       )
       |> Repo.all()
       |> Contex.Dataset.new()
-      |> Contex.PointPlot.new(
-        mapping: %{x_col: :inserted_at, y_cols: [:spo2, :bpm, :perfusion_index]}
-      )
+      |> Contex.PointPlot.new(mapping: %{x_col: :inserted_at, y_cols: y_cols})
+      |> Contex.PointPlot.custom_x_formatter(fn val ->
+        NaiveDateTime.to_time(val) |> Time.to_string()
+      end)
 
     Contex.Plot.new(600, 400, point_plot)
-    # |> Contex.Plot.plot_options(%{legend_setting: :legend_right})
-    # |> Contex.Plot.titles("Recent Data", "Approximately 1 Hour")
+    |> Contex.Plot.titles("Recent Data", "Approximately 1 Hour")
     |> Contex.Plot.to_svg()
   end
 

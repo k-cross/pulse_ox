@@ -35,7 +35,7 @@ defmodule PulseOxPlatform.MixProject do
     [
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:contex, "~> 0.3"},
+      {:contex, github: "mindok/contex", branch: :master},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, "~> 0.14"},
       {:gettext, "~> 0.11"},

@@ -11,7 +11,7 @@ defmodule PulseOxPlatformWeb.QueryComponent do
   """
   def render(assigns) do
     ~L"""
-      <div phx-update="replace">
+      <div phx-update="append">
         <div><b>Average SPO2:</b> <%= @avg_spo2 %></div>
         <div><b>Durration:</b> <%= @durration %></div>
       </div>
@@ -32,6 +32,9 @@ defmodule PulseOxPlatformWeb.QueryComponent do
       </div>
     """
   end
+
+  @impl true
+  def update(%{} = assigns, socket), do: {:ok, assign(socket, assigns)}
 
   @impl true
   @doc """

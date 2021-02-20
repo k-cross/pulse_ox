@@ -26,29 +26,31 @@ defmodule PulseOxPlatformWeb.DatafeedComponent do
 
   @impl true
   @doc "Update the live numerical data on screen."
+  def update(%{} = assigns, socket), do: {:ok, assign(socket, assigns)}
+
   def update([{:event, %PulseOxReader{} = por}], socket) do
-    {:ok,
-     assign(socket,
-       bpm: por.bpm,
-       spo2: por.spo2,
-       pi: por.perfusion_index,
-       alert: por.alert,
-       info: por.info,
-       datetime: por.datetime
-     )}
+    %{
+      bpm: por.bpm,
+      spo2: por.spo2,
+      pi: por.perfusion_index,
+      alert: por.alert,
+      info: por.info,
+      datetime: por.datetime
+    }
+    |> update(socket)
   end
 
   def update(_, socket) do
     PulseOxReader.reconnect(:reader)
 
-    {:ok,
-     assign(socket,
-       bpm: "disconnected",
-       spo2: "disconnected",
-       pi: "disconnected",
-       alert: "disconnected",
-       info: "disconnected",
-       datetime: "disconnected"
-     )}
+    %{
+      bpm: "disconnected",
+      spo2: "disconnected",
+      pi: "disconnected",
+      alert: "disconnected",
+      info: "disconnected",
+      datetime: "disconnected"
+    }
+    |> update(socket)
   end
 end

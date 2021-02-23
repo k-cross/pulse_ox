@@ -11,23 +11,25 @@ defmodule PulseOxPlatformWeb.QueryComponent do
   """
   def render(assigns) do
     ~L"""
-      <div phx-update="append">
-        <div><b>Average SPO2:</b> <%= @avg_spo2 %></div>
-        <div><b>Durration:</b> <%= @durration %></div>
+      <div phx-update="replace">
+        <table>
+          <tr><td><b>Average SPO2</b></td><td><%= @avg_spo2 %></td></tr>
+          <tr><td><b>Durration</b></td><td><%= @durration %></td></tr>
+        </table>
       </div>
       <div>
         <form phx-submit="analyze">
-          <div>
-            <label for="spo2_level">SPO2 Cutoff:</label>
-            <input type="number" id="spo2_level" name="spo2_cutoff">
-          </div>
-          <div>
-            <label for="time_cutoff">Lower Limit Date:</label>
-            <input type="date" id="time_cutoff" name="time_barrier">
-          </div>
-          <div>
-            <input type="submit">
-          </div>
+          <table>
+            <tr>
+              <th><label for="spo2_level">SPO2 Cutoff</label></th>
+              <th><label for="time_cutoff">Lower Limit Date</label></th>
+            </tr>
+            <tr>
+              <td><input type="number" id="spo2_level" name="spo2_cutoff"></td>
+              <td><input type="date" id="time_cutoff" name="time_barrier"></td>
+              <td><input type="submit"></td>
+            </tr>
+          </table>
         </form>
       </div>
     """

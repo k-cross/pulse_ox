@@ -6,20 +6,14 @@ defmodule PulseOxPlatformWeb.DatafeedComponent do
   def render(assigns) do
     ~L"""
       <section class="container" phx-update="replace">
-          <div>
-            <b>BPM:</b> <%= @bpm %>
-          </div>
-          <div>
-            <b>SPO2:</b> <%= @spo2 %>
-          </div>
-          <div>
-            <b>Perfusion Index:</b> <%= @pi %>
-          </div>
-          <div>
-            <div><b>Timestamp:</b> <%= @datetime %> </div>
-            <div><b>Alert:</b> <%= @alert %> </div>
-            <div><b>Information:</b> <%= @info %> </div>
-          </div>
+          <table>
+            <tr><td><b>BPM</b></td><td><%= @bpm %></td></tr>
+            <tr><td><b>SPO2</b></td><td><%= @spo2 %></td></tr>
+            <tr><td><b>Perfusion Index</b></td><td><%= @pi %></td></tr>
+            <tr><td><b>Timestamp</b></td><td><%= @datetime %></td></tr>
+            <tr><td><b>Alert</b></td><td><%= @alert %></td></tr>
+            <tr><td><b>Information</b></td><td><%= @info %></td></tr>
+          </table>
       </section>
     """
   end

@@ -38,7 +38,8 @@ defmodule PulseOxPlatformWeb.PageLive do
           <%= 
             live_component @socket,
             VisualizationComponent,
-            id: :visualize 
+            id: :combined_charts,
+            graph_style: @graph_style
           %>
         </div>
       </section>
@@ -59,7 +60,8 @@ defmodule PulseOxPlatformWeb.PageLive do
        info: "initializing",
        datetime: "initializing",
        avg_spo2: "",
-       durration: ""
+       durration: "",
+       graph_style: Data.graph_data(3600, "line")
      )}
   end
 
@@ -75,9 +77,9 @@ defmodule PulseOxPlatformWeb.PageLive do
 
   @impl true
   @doc """
-  Tied to button that submits the parameters to perform analysis of SPO2 levels
-  over a given durration of time and setting an upper limit, excluding all data
-  points above the given value.
+  Tracks the user interactions of clickable events and delegates the
+  responsibility to the appropriate modules to handle the rendering updates and
+  data changes.
   """
   def handle_event("analyze", args, socket) do
     {spo2_level, lower_limit_date} = parse_args(args)
@@ -88,6 +90,16 @@ defmodule PulseOxPlatformWeb.PageLive do
       self(),
       QueryComponent,
       %{avg_spo2: to_string(Decimal.round(avg, 3)), durration: durration, id: :analyze}
+    )
+
+    {:noreply, socket}
+  end
+
+  def handle_event("graph_type", args, socket) do
+    send_update(
+      self(),
+      VisualizationComponent,
+      %{id: :combined_charts, graph_style: Data.graph_data(3600, args["value"])}
     )
 
     {:noreply, socket}

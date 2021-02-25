@@ -7,7 +7,10 @@ defmodule PulseOxPlatform.Data do
 
   import Ecto.Query
 
+  alias Contex.{LinePlot, PointPlot, Plot}
   alias PulseOxPlatform.Repo
+
+  @y_cols ["SPO2", "BPM", "Perf. Index"]
 
   def setup_ets do
     :ets.new(:po_data, [:named_table, :set, :public, read_concurrency: true])
@@ -63,32 +66,43 @@ defmodule PulseOxPlatform.Data do
   @doc """
   Grabs data and creates a plot graph with multiple `y` datasets and only datetimes as the `x` dataset.
   """
-  @spec graph_data(pos_integer() | :infinite) :: svg :: binary()
-  def graph_data(sample_size \\ 3600) do
-    y_cols = [:spo2, :bpm, :perfusion_index]
+  def graph_data(sample_size \\ 3600, graph_type \\ "line") do
+    dataset = build_dataset(sample_size)
 
-    point_plot =
-      from(
-        e in PulseOx.Schema.Event,
-        select: %{
-          inserted_at: e.inserted_at,
-          spo2: e.spo2,
-          bpm: e.bpm,
-          perfusion_index: e.perfusion_index
-        },
-        order_by: [desc: :inserted_at],
-        limit: 3600
-      )
-      |> Repo.all()
-      |> Contex.Dataset.new()
-      |> Contex.PointPlot.new(mapping: %{x_col: :inserted_at, y_cols: y_cols})
-      |> Contex.PointPlot.custom_x_formatter(fn val ->
-        NaiveDateTime.to_time(val) |> Time.to_string()
-      end)
+    module =
+      case graph_type do
+        "scatter" -> PointPlot
+        _ -> LinePlot
+      end
 
-    Contex.Plot.new(600, 400, point_plot)
-    |> Contex.Plot.titles("Recent Data", "Approximately 1 Hour")
-    |> Contex.Plot.to_svg()
+    options = [
+      mapping: %{x_col: "Inserted At", y_cols: @y_cols},
+      smoothed: true
+    ]
+
+    Plot.new(dataset, module, 600, 400, options)
+    |> Plot.titles("Recent Data", "Approximately 1 Hour")
+    |> Plot.plot_options(%{legend_setting: :legend_right})
+    |> Plot.to_svg()
+  end
+
+  defp build_dataset(sample_size) do
+    dt_cutoff = Timex.shift(DateTime.utc_now(), hours: -1)
+
+    from(
+      e in PulseOx.Schema.Event,
+      select: %{
+        "Inserted At" => e.inserted_at,
+        "SPO2" => e.spo2,
+        "BPM" => e.bpm,
+        "Perf. Index" => e.perfusion_index
+      },
+      order_by: [desc: :inserted_at],
+      where: e.inserted_at > ^dt_cutoff,
+      limit: ^sample_size
+    )
+    |> Repo.all()
+    |> Contex.Dataset.new()
   end
 
   defp calculate_time(count) do

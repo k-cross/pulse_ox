@@ -17,8 +17,4 @@ defmodule PulseOxPlatformWeb.DatafeedComponent do
       </section>
     """
   end
-
-  @impl true
-  @doc "Update the live numerical data on screen."
-  def update(%{} = assigns, socket), do: {:ok, assign(socket, assigns)}
 end

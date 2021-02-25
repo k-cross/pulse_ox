@@ -26,6 +26,18 @@ defmodule PulseOxPlatformWeb.PageLive do
         alert: @alert,
         info: @info
       %>
+      <%= 
+        live_component @socket,
+        VisualizationComponent,
+        id: :live_spo2,
+        graph_style: @spo2_graph
+      %>
+      <%= 
+        live_component @socket,
+        VisualizationComponent,
+        id: :live_bpm,
+        graph_style: @bpm_graph
+      %>
       <section class="container">
         <div>
           <%=
@@ -41,6 +53,25 @@ defmodule PulseOxPlatformWeb.PageLive do
             id: :combined_charts,
             graph_style: @graph_style
           %>
+          <div>
+            <table>
+              <tr>
+                <th><b>Graph Type</b></th>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" id="line_plot" name="graph_type" value="line" phx-click="graph_type">
+                  <label for="line_plot">Line</label>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input type="radio" id="scatter_plot" name="graph_type" value="scatter" phx-click="graph_type">
+                  <label for="scatter_plot">Scatter</label>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
       </section>
     """
@@ -61,6 +92,8 @@ defmodule PulseOxPlatformWeb.PageLive do
        datetime: "initializing",
        avg_spo2: "",
        durration: "",
+       spo2_graph: Data.graph_individual([DateTime.utc_now()], [0], "Initializing"),
+       bpm_graph: Data.graph_individual([DateTime.utc_now()], [0], "Initializing"),
        graph_style: Data.graph_data(3600, "line")
      )}
   end
@@ -71,6 +104,20 @@ defmodule PulseOxPlatformWeb.PageLive do
 
     assigns = read(:ets.lookup(:po_data, :event))
     send_update(self(), DatafeedComponent, Map.put(assigns, :id, :datafeed))
+
+    {l_bpm, l_spo2, _l_pi, l_dt} = format_data()
+
+    send_update(
+      self(),
+      VisualizationComponent,
+      %{id: :live_bpm, graph_style: Data.graph_individual(l_dt, l_bpm, "Heart BPM")}
+    )
+
+    send_update(
+      self(),
+      VisualizationComponent,
+      %{id: :live_spo2, graph_style: Data.graph_individual(l_dt, l_spo2, "SPO2")}
+    )
 
     {:noreply, socket}
   end
@@ -140,7 +187,7 @@ defmodule PulseOxPlatformWeb.PageLive do
     }
   end
 
-  defp read(_) do
+  defp read([{:event, _}]) do
     PulseOxReader.reconnect(:reader)
 
     %{
@@ -151,5 +198,30 @@ defmodule PulseOxPlatformWeb.PageLive do
       info: "disconnected",
       datetime: "disconnected"
     }
+  end
+
+  defp read([{:graph, data}]), do: data
+
+  defp format_data do
+    :ets.lookup(:po_data, :graph)
+    |> read()
+    |> Enum.reduce({[], [], [], []}, fn
+      :disconnected, {l_bpm, l_spo2, l_pi, l_dt} ->
+        {
+          [0 | l_bpm],
+          [0 | l_spo2],
+          [0 | l_pi],
+          [DateTime.utc_now() | l_dt]
+        }
+
+      %PulseOxReader{bpm: bpm, perfusion_index: pi, spo2: spo2, datetime: dt},
+      {l_bpm, l_spo2, l_pi, l_dt} ->
+        {
+          [bpm | l_bpm],
+          [spo2 | l_spo2],
+          [pi | l_pi],
+          [dt | l_dt]
+        }
+    end)
   end
 end

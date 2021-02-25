@@ -9,20 +9,26 @@ Their software also only supports windows.
 The RAD8 medical device itself only provides storage for 72 hours worth of historical data.
 
 This application will:
-[*] store pulse ox data
-[*] live monitor
-[*] have a web interface
+
+- [x] store pulse ox data
+- [x] live monitor
+- [x] have a web interface
 
 I would like for it to:
-[ ] retrieve data (csv format which is good to share with doctors/pulmonary experts)
-[ ] visualize data
-    [ ] live
-    [*] historical
-[ ] query or analyze data
-[ ] be extensible for others to add more devices
-[ ] have options for multiple datastores including purely on disk so people do not need to understand how to setup a database.
+
+- [ ] retrieve data (csv format which is good to share with doctors/pulmonary experts)
+- [x] visualize data
+    * live
+    * historical
+- [ ] query or analyze data
+- [ ] be extensible for others to add more devices
+- [ ] have options for multiple datastores including purely on disk so people do not need to understand how to setup a database.
 
 I am on a clock and can't promise the features will ever be developed on the second list.
+
+## Demo
+
+![Demo](/demo.mov)
 
 ## Requirements and Dependencies
 

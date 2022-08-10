@@ -5,9 +5,9 @@ defmodule PulseOxPlatform.MixProject do
     [
       app: :pulse_ox_platform,
       version: "0.1.0",
-      elixir: "~> 1.10",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -35,7 +35,8 @@ defmodule PulseOxPlatform.MixProject do
     [
       {:floki, ">= 0.0.0", only: :test},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:contex, github: "mindok/contex", branch: :master},
+      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
+      {:contex, "~> 0.4"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, "~> 0.14"},
       {:gettext, "~> 0.11"},
@@ -43,10 +44,10 @@ defmodule PulseOxPlatform.MixProject do
       {:nerves_uart, "~> 1.0"},
       {:phoenix, "~> 1.5"},
       {:phoenix_live_view, "~> 0.14"},
-      {:phoenix_html, "~> 2.11"},
+      {:phoenix_html, "~> 3.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:telemetry_metrics, "~> 0.5"},
-      {:telemetry_poller, "~> 0.5"},
+      {:telemetry_metrics, "~> 0.1"},
+      {:telemetry_poller, "~> 1.0"},
       {:timex, "~> 3.0"}
     ]
   end
@@ -59,7 +60,7 @@ defmodule PulseOxPlatform.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "cmd npm install --prefix assets"],
+      "assets.deploy": ["esbuild default --minify", "phx.digest"],
       reset: ["ecto.drop", "ecto.create", "ecto.migrate"]
     ]
   end

@@ -35,11 +35,11 @@ I am on a clock and can't promise the features will ever be developed on the sec
 Things that are expected to already be setup
 
 * postgresql
-* erlang >= 21.0
-* elixir >= 1.10
-* nodejs >= 10.0
+* erlang >= 24.0
+* elixir >= 1.14
+* nodejs >= 17.0
 
-_Note_: Binaries can be built which removes the need for erlang, elixir, and nodejs for a running environment but I don't personally plan on providing this.
+_Note_: Binaries can be built which removes the need for erlang, elixir, and nodejs for a running environment
 
 ## How to run
 

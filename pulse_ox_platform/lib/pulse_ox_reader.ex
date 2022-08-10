@@ -16,7 +16,7 @@ defmodule PulseOxReader do
 
   alias Nerves.UART
 
-  @reader Application.get_env(:pulse_ox_platform, :reader)
+  @reader Application.compile_env(:pulse_ox_platform, :reader)
   @named_genserver :reader
 
   defstruct [

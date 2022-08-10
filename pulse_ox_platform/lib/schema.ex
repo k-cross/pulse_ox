@@ -8,9 +8,9 @@ defmodule PulseOx.Schema.Event do
 
   schema "event" do
     timestamps(updated_at: false)
-    field(:spo2, :integer, null: false)
-    field(:bpm, :integer, null: false)
-    field(:perfusion_index, :float, null: false)
+    field(:spo2, :integer)
+    field(:bpm, :integer)
+    field(:perfusion_index, :float)
   end
 
   @required [:spo2, :bpm, :perfusion_index]

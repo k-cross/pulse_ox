@@ -4,8 +4,8 @@ defmodule PulseOxPlatformWeb.DatafeedComponent do
   @impl true
   @doc "The HTML that's updated and rendered for the numerical readings."
   def render(assigns) do
-    ~L"""
-      <section class="container" phx-update="replace">
+    ~H"""
+      <section class="container" id="main-metrics" phx-update="replace">
           <table>
             <tr><td><b>BPM</b></td><td><%= @bpm %></td></tr>
             <tr><td><b>SPO2</b></td><td><%= @spo2 %></td></tr>

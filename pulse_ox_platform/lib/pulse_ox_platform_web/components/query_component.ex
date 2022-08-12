@@ -8,8 +8,9 @@ defmodule PulseOxPlatformWeb.QueryComponent do
   points above the given value.
   """
   def render(assigns) do
-    ~L"""
-      <div phx-update="replace">
+    ~H"""
+    <div id="analyze">
+      <div id="analysis-query" phx-update="replace">
         <table>
           <tr><td><b>Average SPO2</b></td><td><%= @avg_spo2 %></td></tr>
           <tr><td><b>Durration</b></td><td><%= @durration %></td></tr>
@@ -30,6 +31,7 @@ defmodule PulseOxPlatformWeb.QueryComponent do
           </table>
         </form>
       </div>
+    </div>
     """
   end
 end

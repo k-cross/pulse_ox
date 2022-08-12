@@ -3,8 +3,8 @@ defmodule PulseOxPlatformWeb.VisualizationComponent do
 
   @impl true
   def render(assigns) do
-    ~L"""
-      <div phx-update="replace">
+    ~H"""
+      <div id="visualization" phx-update="replace">
         <%= @graph_style %>
       </div>
     """

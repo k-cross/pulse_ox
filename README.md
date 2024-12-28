@@ -28,7 +28,7 @@ I am on a clock and can't promise the features will ever be developed on the sec
 
 ## Demo
 
-[![Demo](https://hexdocs.pm/phoenix/assets/logo.png)(https://raw.githubusercontent.com/k-cross/pulse_ox/main/assets/demo.mov)
+[![Demo](https://hexdocs.pm/phoenix/assets/logo.png)(https://github.com/k-cross/pulse_ox/raw/refs/heads/main/demo.mov)
 
 ## Requirements and Dependencies
 

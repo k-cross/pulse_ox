@@ -28,7 +28,7 @@ I am on a clock and can't promise the features will ever be developed on the sec
 
 ## Demo
 
-![](demo.mov)
+https://github.com/k-cross/pulse_ox/raw/refs/heads/main/demo.mov
 
 ## Requirements and Dependencies
 

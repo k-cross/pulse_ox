@@ -28,7 +28,7 @@ I am on a clock and can't promise the features will ever be developed on the sec
 
 ## Demo
 
-![Demo](/demo.mov)
+![](demo.mov)
 
 ## Requirements and Dependencies
 
